@@ -1,7 +1,6 @@
 import { Colors } from "@/constants/Colors";
 import {
   FlatList,
-  Image,
   Pressable,
   SafeAreaView,
   StyleSheet,
@@ -13,8 +12,7 @@ import { useDispatch } from "react-redux";
 import { AddDispatch } from "@/store/store";
 import { SET_LOGGEDOUT_USER } from "@/store/auth/authIndex";
 import { useGetBooksQuery } from "../../store/rtk/bookApi";
-import RenderedBooks from "@/components/RenderedBooks";
-import Card from "@/components/ui/card/Card";
+import RenderedBooks from "@/components/RenderedBooks";;
 
 export default function BookList() {
   const dispatch = useDispatch<AddDispatch>();
@@ -27,7 +25,7 @@ export default function BookList() {
   // console.log("data from backend dashboard.tsx:", data);
 
   if (!data) {
-    return <Text>Loading...</Text>; // Or show a loading spinner
+    return <Text>Loading...</Text>; 
   }
 
   if (error) {
@@ -169,35 +167,3 @@ const styles = StyleSheet.create({
   },
 });
 
-{
-  /* <Card style={styles.cardClass}>
-                    <View style={styles.innerContainer}>
-                      <View>
-                        {itemData.item.imageLinks?.smallThumbnail ? (
-                          <Image
-                            source={{
-                              // uri: itemData.item.volumeInfo.imageLinks
-                              //   ?.smallThumbnail,
-                              uri: secureImageUrl,
-                            }}
-                            style={{
-                              width: 100,
-                              height: 100,
-                              resizeMode: "contain",
-                            }}
-                          />
-                        ) : (
-                          <Text>No Image Available</Text>
-                        )}
-                      </View>
-                      <Text style={styles.text}>
-                        {itemData.item.title}
-                      </Text>
-                      <Text style={styles.text}>
-                        <Text style={styles.writtenBy}>Written by:</Text>
-                        {itemData.item.authors?.[0] ??
-                          "Unknown Author"}
-                      </Text>
-                    </View>
-                  </Card> */
-}

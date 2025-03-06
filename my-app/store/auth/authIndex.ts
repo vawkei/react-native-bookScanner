@@ -6,8 +6,8 @@ import { AuthState } from "@/interfaces/interface";
 const initialAuthState: AuthState = {
   isLoggedIn: false,
   isSuccess: false,
-  isError: false,
-  isLoading: false,
+  // isError: false,
+  // isLoading: false,
   message: "",
   user: null,
   token: "",
@@ -28,6 +28,7 @@ export const authSlice = createSlice({
       state.isLoggedIn = true;
       state.token = action.payload.token;
       state.message = action.payload.msg;
+      state.user = action.payload
 
       storeToken(action.payload.token);
     },
@@ -41,7 +42,7 @@ export const authSlice = createSlice({
       state.isLoggedIn = true;
     },
     RESET_AUTH(state) {
-      state.isError = false;
+      // state.isError = false;
       state.isSuccess = false;
       state.message = "";
     },

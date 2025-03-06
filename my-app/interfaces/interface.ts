@@ -21,8 +21,8 @@ export interface Book {
  export interface AuthState{
   isLoggedIn: boolean,
   isSuccess: boolean,
-  isError: boolean,
-  isLoading: boolean,
+  // isError: boolean,
+  // isLoading: boolean,
   message: string,
   user: null,
   token: string,

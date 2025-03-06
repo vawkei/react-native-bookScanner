@@ -1,4 +1,3 @@
-// import CameraScreen from "@/components/Image/CameraScreen";
 import CameraScreen from "../../components/image/CameraScreen";
 import { Colors } from "@/constants/Colors";
 import { StyleSheet, Text, View } from "react-native";

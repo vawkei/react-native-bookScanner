@@ -142,8 +142,8 @@ export default function CameraScreen() {
             ListEmptyComponent={<Text>No Books Available</Text>}
             alwaysBounceVertical={true}
             // ListHeaderComponent={<Text>Books Found</Text>}
+            // ListFooterComponent={<Text>Voke || Vawkei</Text>}
             ListHeaderComponentStyle={styles.headerComponentStyle}
-            ListFooterComponent={<Text>Voke || Vawkei</Text>}
             ItemSeparatorComponent={ItemSeparator}
             contentContainerStyle={styles.flatListContainer}
             renderItem={(itemData) => {

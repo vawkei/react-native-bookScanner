@@ -4,13 +4,16 @@ import { AddDispatch, RootState, store } from "@/store/store";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router, Slot, Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import { useEffect } from "react";
-// import "react-native-reanimated";
+import { useEffect, useState } from "react";
 import { Provider } from "react-redux";
 import { useDispatch, useSelector, TypedUseSelectorHook } from "react-redux";
 import { jwtDecode } from "jwt-decode";
+import Loading from "@/components/ui/loading/Loading";
 
 export function App() {
+
+  const [isLoading,setIsLoading] = useState(true);
+
   const dispatch = useDispatch<AddDispatch>();
 
   const useTypedSelector: TypedUseSelectorHook<RootState> = useSelector;
@@ -21,7 +24,7 @@ export function App() {
       try {
         const storedToken = await AsyncStorage.getItem("authToken");
         if (!storedToken) {
-          router.push("/");
+           router.push("/");
           return;
         }
 
@@ -32,6 +35,7 @@ export function App() {
         if (!decodedToken.exp || decodedToken.exp < currentTime) {
           await AsyncStorage.removeItem("authToken");
           router.push("/");
+          return
         } else {
           dispatch(SET_AUTH_STATE(decodedToken));
         }
@@ -39,24 +43,13 @@ export function App() {
         const message =
           error instanceof Error ? error.message : "something went wrong";
         console.log("asyncStorageError:", message);
+      }finally{
+        setIsLoading(false);
       }
     };
     fetchToken();
   }, [dispatch]);
 
-  // useEffect(() => {
-  //   async function removeTokenAndBooks() {
-  //     try {
-  //       await AsyncStorage.clear();
-  //       console.log("storage cleared successfully.");
-  //     } catch (error) {
-  //       const message =
-  //         error instanceof Error ? error.message : "something went wrong";
-  //       console.log("error removing token:", message);
-  //     }
-  //   }
-  //   removeTokenAndBooks();
-  // }, []);
 
   useEffect(() => {
     if (isLoggedIn && token) {
@@ -68,6 +61,7 @@ export function App() {
 
   return (
     <>
+    {isLoading && <Loading />}
       <Stack
         screenOptions={{
           headerStyle: { backgroundColor: Colors.customColors.primary500 },

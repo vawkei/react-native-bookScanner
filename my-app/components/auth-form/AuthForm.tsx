@@ -26,6 +26,8 @@ const AuthForm = () => {
   const [enteredEmail, setEnteredEmail] = useState("");
   const [enteredPassword, setEnteredPassword] = useState("");
 
+  const emailIsValid = enteredEmail.includes("@");
+
   const [messageOnUi, setMessageOnUi] = useState("");
   const [haveAccount, setHaveAccount] = useState(false);
 
@@ -78,6 +80,7 @@ const AuthForm = () => {
       if (
         enteredName.trim().length === 0 ||
         enteredEmail.trim().length === 0 ||
+        !emailIsValid ||
         enteredPassword.trim().length < 6
       ) {
         Alert.alert(

@@ -1,5 +1,6 @@
 import {  Image, StyleSheet, Text, View } from "react-native";
 import spinner from "../../../assets/images/spinner.jpg";
+import { Colors } from "@/constants/Colors";
 
 export default function Loading() {
   return (
@@ -17,10 +18,13 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     padding: 32,
+    backgroundColor:Colors.customColors.gray700
   },
   messsage: {
     fontSize: 16,
-    marginBottom: 12,
+    // marginBottom: 12,
+    textAlign:"center",
+    color:"white"
   },
   gif: {
     width: 100,  // Adjust width

@@ -7,17 +7,18 @@ export default function HomeScreen() {
 
   return (
     <View style={styles.homeContainer}>
+      
+      <Text style={styles.text}>Vawkei || Voke's</Text>
       <Text style={styles.text}>Book Scanner App</Text>
 
       <View style={styles.buttonContainer}>
         <TouchableOpacity
           style={styles.button}
-          // onPress={() => router.push("/(tabs)/book-list")}>
           onPress={() => router.push("/auth")}>
-          {/* <Text style={styles.buttonText}>Click Here for List of Books</Text> */}
           <Text style={styles.buttonText}>Login || Signup</Text>
         </TouchableOpacity>
       </View>
+
     </View>
   );
 }
