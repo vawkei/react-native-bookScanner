@@ -4,7 +4,6 @@ import "dotenv/config";
 import mongoose from "mongoose";
 import ip from "ip";
 import { Request, Response } from "express";
-// import cookieParser from 'cookie-parser';
 
 import authRouter from "./routes/auth-router"
 import googleBookApiRouter from "./routes/googleBookRouter";
@@ -18,8 +17,7 @@ const app = express();
 const authRoute = authRouter
 const googleAPIRoute = googleBookApiRouter;
 
-// parse the jason body and dealing wiyh my cookies:
-// app.use(cookieParser());
+// parse the jason body:
 app.use(express.json());
 
 const corsOptions = {
