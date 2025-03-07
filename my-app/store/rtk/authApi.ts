@@ -1,10 +1,10 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-// import Constants from "expo-constants"
 
 export const authApi = createApi({
   reducerPath: "authApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://192.168.43.52:8080",
+    // baseUrl: "http://192.168.43.52:8080",
+    baseUrl: process.env.EXPO_PUBLIC_PROD_API_URL || "http://192.168.43.52:5000",
   }),
   tagTypes: ["auth"],
   endpoints: (builder) => ({

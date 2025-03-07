@@ -9,6 +9,7 @@ import { Provider } from "react-redux";
 import { useDispatch, useSelector, TypedUseSelectorHook } from "react-redux";
 import { jwtDecode } from "jwt-decode";
 import Loading from "@/components/ui/loading/Loading";
+// import Loading from "@/components/ui/loading/Loading";
 
 export function App() {
 
@@ -22,6 +23,7 @@ export function App() {
   useEffect(() => {
     const fetchToken = async () => {
       try {
+        console.log("API Key:", process.env.EXPO_PUBLIC_APILAYER_API_KEY);
         const storedToken = await AsyncStorage.getItem("authToken");
         if (!storedToken) {
            router.push("/");
@@ -51,45 +53,66 @@ export function App() {
   }, [dispatch]);
 
 
+  // useEffect(() => {
+  //   if (isLoggedIn && token) {
+  //     router.replace("/(tabs)/dashboard");
+  //   } else {
+  //     router.push("/");
+  //   }
+  // }, [isLoggedIn, token, isLoading]);
+
+
+  //📒📒played around withn this, also worked well:👇👇
   useEffect(() => {
-    if (isLoggedIn && token) {
-      router.replace("/(tabs)/dashboard");
-    } else {
-      router.push("/auth");
+    if (!isLoading) { 
+      if (isLoggedIn && token) {
+        router.replace("/(tabs)/dashboard");
+      } else {
+        router.push("/"); 
+      }
     }
-  }, [isLoggedIn, token]);
+  }, [isLoading, isLoggedIn, token]);
+  // 👆👆===================================================👆👆
+  
 
   return (
     <>
-    {isLoading && <Loading />}
-      <Stack
-        screenOptions={{
-          headerStyle: { backgroundColor: Colors.customColors.primary500 },
-          headerTintColor: Colors.customColors.gray700,
-          contentStyle: { backgroundColor: Colors.customColors.gray700 },
-        }}>
-        <Stack.Screen
-          name="index"
-          options={{ headerTitle: "Home", headerShown: true }}
-        />
-        <Stack.Screen
-          name="auth"
-          options={{ headerTitle: "Auth", headerShown: true }}
-        />
-        <Stack.Screen
-          name="(tabs)"
-          options={{
-            headerShown: false,
-          }}
-        />
-
-        <Slot />
-
-        <Stack.Screen name="+not-found" />
-      </Stack>
+      {isLoading ? (
+        <Loading />
+      ) : (
+        <>
+        <Stack
+          screenOptions={{
+            headerStyle: { backgroundColor: Colors.customColors.primary500 },
+            headerTintColor: Colors.customColors.gray700,
+            contentStyle: { backgroundColor: Colors.customColors.gray700 },
+          }}>
+          <Stack.Screen
+            name="index"
+            options={{ headerTitle: "Home", headerShown: true }}
+          />
+          <Stack.Screen
+            name="auth"
+            options={{ headerTitle: "Auth", headerShown: true }}
+          />
+          <Stack.Screen
+            name="(tabs)"
+            options={{
+              headerShown: false,
+            }}
+          />
+  
+          <Slot />
+  
+          <Stack.Screen name="+not-found" />
+        </Stack>
+        <StatusBar style="auto" />
+      </>
+      )}
       <StatusBar style="auto" />
     </>
   );
+  
 }
 
 export default function RootLayout() {

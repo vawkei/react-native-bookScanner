@@ -14,15 +14,19 @@
 
 //👇👇👇======================= number 2================================👇👇👇
 
-import { API_KEY } from "@env";
-// import { CameraCapturedPicture } from "expo-camera";
+
+// import { API_KEY } from "@env"; does nt work with EAS
+
 
 export const ExtractTextFromImage = async (file: any) => {
+
+   const API_KEY = process.env.EXPO_PUBLIC_APILAYER_API_KEY || ""
+
   let myHeaders = new Headers();
   myHeaders.append(
     "apikey",
 
-    // ADDD YOUR API KEY HERE
+    // ADDD API KEY HERE
     API_KEY
   );
   myHeaders.append("Content-Type", "multipart/form-data");

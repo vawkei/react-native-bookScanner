@@ -1,6 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
+
 const getToken = async () => {
   return await AsyncStorage.getItem("authToken");
 };
@@ -8,7 +9,8 @@ const getToken = async () => {
 const customBaseQuery = async (args: any, api: any, extraOptions: any) => {
   const token = await getToken();
   const baseQuery = fetchBaseQuery({
-    baseUrl: "http://192.168.43.52:8080",
+    // baseUrl: "http://192.168.43.52:8080",
+    baseUrl: process.env.EXPO_PUBLIC_PROD_API_URL || "http://192.168.43.52:5000",
     prepareHeaders: (headers) => {
       if (token) {
         headers.set("Authorization", ` ${token}`);

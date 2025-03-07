@@ -13,8 +13,8 @@ import { Camera, CameraType, CameraView } from "expo-camera";
 import * as MediaLibrary from "expo-media-library";
 import { Colors } from "@/constants/Colors";
 import { ExtractTextFromImage } from "./ImageToTextApi";
-import { useDispatch, useSelector, TypedUseSelectorHook } from "react-redux";
-import { AddDispatch, RootState } from "@/store/store";
+// import { useDispatch, useSelector, TypedUseSelectorHook } from "react-redux";
+// import { AddDispatch, RootState } from "@/store/store";
 // import { BOOK_FROM_GOOGLEAPI } from "@/store/books/booksIndex";
 import Card from "../ui/card/Card";
 import {
@@ -24,6 +24,7 @@ import {
 import { useRouter } from "expo-router";
 import { Book } from "@/interfaces/interface";
 import { useFocusEffect } from "@react-navigation/native";
+import Toast from "react-native-toast-message";
 
 export default function CameraScreen() {
   const [hasCameraPermission, setHasCameraPermission] = useState(false);
@@ -37,7 +38,7 @@ export default function CameraScreen() {
   const [isLoading, setIsLoading] = useState(false);
 
   // const { books } = useTypedSelector((state) => state.book);
-  const [books,setBooks] = useState<Book[]>([]);
+  const [books, setBooks] = useState<Book[]>([]);
 
   const [saveBooksToStorage] = useSaveBookSearchedBooksToDbMutation();
   const [getBook, { data, error, isLoading: retrieving }] =
@@ -62,11 +63,9 @@ export default function CameraScreen() {
     useCallback(() => {
       setBooks([]);
       setShowButton(true);
-      setIsLoading(false)
+      setIsLoading(false);
     }, [])
   );
-  
-
 
   if (!hasCameraPermission) {
     return (
@@ -100,30 +99,62 @@ export default function CameraScreen() {
         setPhoto(newPhoto?.uri);
 
         const extractedText = await ExtractTextFromImage(newPhoto);
-        if (!extractedText || extractedText === null) {
+        if (!extractedText) {
           console.error("No text extracted.Possibly network issue.");
+          Toast.show({
+            type: "error",
+            text1: "Text Extraction Failed!",
+            text2: "No text extracted.Possibly network issue",
+            position: "top",
+          });
+          setBooks([]);
+          setShowButton(true);
+          setIsLoading(false);
           return;
         }
 
         console.log("Extracted text:", extractedText);
+
         const response = await getBook(extractedText).unwrap();
         console.log("googleBookAPIResponse:", response);
         // 👉👉googleBookAPIResponse: {"data": {"items": [[Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object]], "kind": "books#volumes", "totalItems": 2109}}👈👈
 
-        setBooks(response?.data?.items)
+        if (!response.data.items || response.data.totalItems === 0) {
+          console.error("No Books Found.");
+          Toast.show({
+            type: "error",
+            text1: "Total Items Found 0!",
+            text2: "Book wasn't Found Try Again Later.",
+            position: "top",
+          });
+          setBooks([]);
+          setShowButton(true);
+          setIsLoading(false);
+          return;
+        }
+
+        setBooks(response?.data?.items);
         // save the response from backend to mongodb:👇👇
         const saveBooksToStorageResponse = await saveBooksToStorage(
           response?.data?.items
         );
 
-        console.log("saveBooksToStorageResponse:",saveBooksToStorageResponse);
-        if(saveBooksToStorageResponse?.data?.msg ==="Books stored successfully"){
-          router.push("/(tabs)/dashboard")
-        };
+        console.log("saveBooksToStorageResponse:", saveBooksToStorageResponse);
+        if (
+          saveBooksToStorageResponse?.data?.msg === "Books stored successfully"
+        ) {
+          router.push("/(tabs)/dashboard");
+        }
       } catch (error) {
         const message =
           error instanceof Error ? error.message : "something went wrong";
         console.log("error message:", message);
+        Toast.show({
+          type: "error",
+          text1: "ERROR!",
+          text2: message,
+          position: "top",
+        });
       }
     }
   };

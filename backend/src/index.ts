@@ -46,7 +46,8 @@ app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
 
 // 👇👇====================starting the server locally======================👇👇
-// const port = Number(process.env.PORT) || 8080;
+// const port = Number(process.env.PORT) || 5000;
+//// const port = Number(process.env.PORT) || 8080;
 // const HOST = "0.0.0.0";
 
 // const start = async () => {
@@ -58,7 +59,8 @@ app.use(errorHandlerMiddleware);
 // 👆👆====================starting the server locally======================👆👆
 
 // 👇👇====================starting the server with mongodb=================👇👇
-const port = Number(process.env.PORT) || 8080;  // Cast to number
+// const port = Number(process.env.PORT) || 8080;  // Cast to number
+const port = Number(process.env.PORT) || 5000;  // Cast to number
 let url:any;
 url = process.env.MONGODB_URI;
 

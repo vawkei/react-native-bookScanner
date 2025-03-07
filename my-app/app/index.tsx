@@ -4,6 +4,7 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 export default function HomeScreen() {
   const router = useRouter();
+  console.log("API Key:", process.env.EXPO_PUBLIC_APILAYER_API_KEY);
 
   return (
     <View style={styles.homeContainer}>

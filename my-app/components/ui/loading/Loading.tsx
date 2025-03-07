@@ -18,7 +18,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     padding: 32,
-    backgroundColor:Colors.customColors.gray700
+    backgroundColor:Colors.customColors.gray700,
+    // marginVertical:500
   },
   messsage: {
     fontSize: 16,
