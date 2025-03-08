@@ -12,8 +12,7 @@ import Loading from "@/components/ui/loading/Loading";
 // import Loading from "@/components/ui/loading/Loading";
 
 export function App() {
-
-  const [isLoading,setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
 
   const dispatch = useDispatch<AddDispatch>();
 
@@ -23,10 +22,10 @@ export function App() {
   useEffect(() => {
     const fetchToken = async () => {
       try {
-        console.log("API Key:", process.env.EXPO_PUBLIC_APILAYER_API_KEY);
+
         const storedToken = await AsyncStorage.getItem("authToken");
         if (!storedToken) {
-           router.push("/");
+          router.push("/");
           return;
         }
 
@@ -37,7 +36,7 @@ export function App() {
         if (!decodedToken.exp || decodedToken.exp < currentTime) {
           await AsyncStorage.removeItem("authToken");
           router.push("/");
-          return
+          return;
         } else {
           dispatch(SET_AUTH_STATE(decodedToken));
         }
@@ -45,35 +44,23 @@ export function App() {
         const message =
           error instanceof Error ? error.message : "something went wrong";
         console.log("asyncStorageError:", message);
-      }finally{
+      } finally {
         setIsLoading(false);
       }
     };
     fetchToken();
   }, [dispatch]);
 
-
-  // useEffect(() => {
-  //   if (isLoggedIn && token) {
-  //     router.replace("/(tabs)/dashboard");
-  //   } else {
-  //     router.push("/");
-  //   }
-  // }, [isLoggedIn, token, isLoading]);
-
-
-  //📒📒played around withn this, also worked well:👇👇
   useEffect(() => {
-    if (!isLoading) { 
+    if (!isLoading) {
       if (isLoggedIn && token) {
         router.replace("/(tabs)/dashboard");
       } else {
-        router.push("/"); 
+        router.push("/");
       }
     }
   }, [isLoading, isLoggedIn, token]);
   // 👆👆===================================================👆👆
-  
 
   return (
     <>
@@ -81,38 +68,37 @@ export function App() {
         <Loading />
       ) : (
         <>
-        <Stack
-          screenOptions={{
-            headerStyle: { backgroundColor: Colors.customColors.primary500 },
-            headerTintColor: Colors.customColors.gray700,
-            contentStyle: { backgroundColor: Colors.customColors.gray700 },
-          }}>
-          <Stack.Screen
-            name="index"
-            options={{ headerTitle: "Home", headerShown: true }}
-          />
-          <Stack.Screen
-            name="auth"
-            options={{ headerTitle: "Auth", headerShown: true }}
-          />
-          <Stack.Screen
-            name="(tabs)"
-            options={{
-              headerShown: false,
-            }}
-          />
-  
-          <Slot />
-  
-          <Stack.Screen name="+not-found" />
-        </Stack>
-        <StatusBar style="auto" />
-      </>
+          <Stack
+            screenOptions={{
+              headerStyle: { backgroundColor: Colors.customColors.primary500 },
+              headerTintColor: Colors.customColors.gray700,
+              contentStyle: { backgroundColor: Colors.customColors.gray700 },
+            }}>
+            <Stack.Screen
+              name="index"
+              options={{ headerTitle: "Home", headerShown: true }}
+            />
+            <Stack.Screen
+              name="auth"
+              options={{ headerTitle: "Auth", headerShown: true }}
+            />
+            <Stack.Screen
+              name="(tabs)"
+              options={{
+                headerShown: false,
+              }}
+            />
+
+            <Slot />
+
+            <Stack.Screen name="+not-found" />
+          </Stack>
+          <StatusBar style="auto" />
+        </>
       )}
       <StatusBar style="auto" />
     </>
   );
-  
 }
 
 export default function RootLayout() {

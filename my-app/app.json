@@ -15,7 +15,12 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO"
+      ],
+      "package": "com.vawkei.bookscanner"
     },
     "web": {
       "bundler": "metro",
@@ -44,7 +49,14 @@
       "typedRoutes": true
     },
     "extra": {
-      "expoRouterAppRoot": "app"
-    }
+      "expoRouterAppRoot": "app",
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "d0071cae-2b29-44af-992b-384394c1bbf2"
+      }
+    },
+    "owner": "vawkei"
   }
 }

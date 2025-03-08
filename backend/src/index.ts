@@ -21,11 +21,13 @@ const googleAPIRoute = googleBookApiRouter;
 app.use(express.json());
 
 const corsOptions = {
-  origin: [
-    "http://localhost:8081",
-    "http://192.168.43.52:8081",
-  ],
+  // origin: [
+  //   "http://localhost:8081",
+  //   "http://192.168.43.52:8081",
+  // ],
   // Allow requests from local network👆👆
+
+  origin: "*", // 👈 TEMPORARY for testing, not secure for production
   credentials: true,
   methods: ["GET", "POST", "PATCH", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization", "my-custom-header"],

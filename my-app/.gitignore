@@ -39,3 +39,7 @@ yarn-error.*
 .env
 expo-env.d.ts
 env.d.ts
+
+/ios
+/android
+eas.json

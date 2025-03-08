@@ -1,6 +1,7 @@
 import {
   Alert,
   Pressable,
+  ScrollView,
   StyleSheet,
   Text,
   TextInput,
@@ -44,8 +45,8 @@ const AuthForm = () => {
   const dispatch = useDispatch<AddDispatch>();
 
   const router = useRouter();
-  const [registerUser,{isLoading:isRegistering}] = useRegisterMutation();
-  const [loginUser,{isLoading:isLogginIn}] = useLoginMutation();
+  const [registerUser, { isLoading: isRegistering }] = useRegisterMutation();
+  const [loginUser, { isLoading: isLogginIn }] = useLoginMutation();
 
   const navigateToMainHome = () => {
     router.push("/");
@@ -54,15 +55,20 @@ const AuthForm = () => {
   const submitHandler = async () => {
     if (haveAccount) {
       //👇👇👇 Login===========================================>>
+      const API_URL =
+        process.env.APP_ENV === "production"
+          ? process.env.EXPO_PUBLIC_PROD_API_URL
+          : process.env.EXPO_PUBLIC_DEV_API_URL;
+      Alert.alert("API_URL:", API_URL); //📒📒for debugging o
       if (
         enteredEmail.trim().length === 0 ||
         enteredPassword.trim().length < 6
       ) {
         Alert.alert(
-          "please fill inputs. Password shouldn't be less than 6 letters"
+          "please fill inputs."
         );
         console.log(
-          "please fill inputs. Password shouldn't be less than 6 letters"
+          "please fill inputs."
         );
         return;
       }
@@ -84,7 +90,7 @@ const AuthForm = () => {
         enteredPassword.trim().length < 6
       ) {
         Alert.alert(
-          "please fill inputs. Password shouldn't be less than 6 letters"
+          "please fill inputs."
         );
         console.log(
           "please fill inputs. Password shouldn't be less than 6 letters"
@@ -135,68 +141,78 @@ const AuthForm = () => {
   }, [message, isLoggedIn, token, dispatch, router]);
 
   return (
-    <Card style={styles.cardStyle}>
-      {isRegistering || isLogginIn && <Loading />}
-      <Text style={{ color: "green", fontSize: 16 }}>{messageOnUi}</Text>
-      <View style={styles.headingContainer}>
-        <Text style={styles.heading}>{haveAccount ? "Login" : "Register"}</Text>
-        <Pressable
-          style={styles.pressable}
-          onPress={() => {
-            console.log("pressable has been clicked, Lisa!");
-            navigateToMainHome();
-          }}>
-          <Text style={styles.closeButton}>X</Text>
-        </Pressable>
-      </View>
-
-      {haveAccount ? (
-        <View>{null}</View>
+    <>
+      {isRegistering || isLogginIn ? (
+        <Loading />
       ) : (
-        <View style={styles.textInputContainer}>
-          <TextInput
-            style={styles.textInput}
-            placeholder="enter name here"
-            value={enteredName}
-            onChangeText={(enteredText) => setEnteredName(enteredText)}
-          />
-        </View>
+        <ScrollView>
+          <Card style={styles.cardStyle}>
+            {/* {isRegistering || isLogginIn && <Loading />} */}
+            <Text style={{ color: "green", fontSize: 16 }}>{messageOnUi}</Text>
+            <View style={styles.headingContainer}>
+              <Text style={styles.heading}>
+                {haveAccount ? "Login" : "Register"}
+              </Text>
+              <Pressable
+                style={styles.pressable}
+                onPress={() => {
+                  console.log("pressable has been clicked, Lisa!");
+                  navigateToMainHome();
+                }}>
+                <Text style={styles.closeButton}>X</Text>
+              </Pressable>
+            </View>
+
+            {haveAccount ? (
+              <View>{null}</View>
+            ) : (
+              <View style={styles.textInputContainer}>
+                <TextInput
+                  style={styles.textInput}
+                  placeholder="enter name here"
+                  value={enteredName}
+                  onChangeText={(enteredText) => setEnteredName(enteredText)}
+                />
+              </View>
+            )}
+
+            <View style={styles.textInputContainer}>
+              <TextInput
+                style={styles.textInput}
+                placeholder="enter email"
+                value={enteredEmail}
+                onChangeText={(enteredText) => setEnteredEmail(enteredText)}
+                autoCapitalize="none"
+                autoCorrect={false}
+                keyboardType="email-address"
+              />
+            </View>
+            <View style={styles.textInputContainer}>
+              <TextInput
+                style={styles.textInput}
+                placeholder="enter password"
+                value={enteredPassword}
+                onChangeText={(enteredText) => setEnteredPassword(enteredText)}
+                secureTextEntry={true}
+              />
+            </View>
+            <View>
+              <Pressable style={styles.submitButton} onPress={submitHandler}>
+                <Text style={styles.submitText}>
+                  {haveAccount ? "Login" : "Register"}
+                </Text>
+              </Pressable>
+            </View>
+
+            <View style={styles.switchAuthMode}>
+              <Pressable onPress={switchAuthModeHandler}>
+                <Text>{haveAccount ? "create an account" : "login"}</Text>
+              </Pressable>
+            </View>
+          </Card>
+        </ScrollView>
       )}
-
-      <View style={styles.textInputContainer}>
-        <TextInput
-          style={styles.textInput}
-          placeholder="enter email"
-          value={enteredEmail}
-          onChangeText={(enteredText) => setEnteredEmail(enteredText)}
-          autoCapitalize="none"
-          autoCorrect={false}
-          keyboardType="email-address"
-        />
-      </View>
-      <View style={styles.textInputContainer}>
-        <TextInput
-          style={styles.textInput}
-          placeholder="enter password"
-          value={enteredPassword}
-          onChangeText={(enteredText) => setEnteredPassword(enteredText)}
-          secureTextEntry={true}
-        />
-      </View>
-      <View>
-        <Pressable style={styles.submitButton} onPress={submitHandler}>
-          <Text style={styles.submitText}>
-            {haveAccount ? "Login" : "Register"}
-          </Text>
-        </Pressable>
-      </View>
-
-      <View style={styles.switchAuthMode}>
-        <Pressable onPress={switchAuthModeHandler}>
-          <Text>{haveAccount ? "create an account" : "login"}</Text>
-        </Pressable>
-      </View>
-    </Card>
+    </>
   );
 };
 

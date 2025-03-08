@@ -1,14 +1,19 @@
 import { Colors } from "@/constants/Colors";
 import { useRouter } from "expo-router";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 export default function HomeScreen() {
   const router = useRouter();
-  console.log("API Key:", process.env.EXPO_PUBLIC_APILAYER_API_KEY);
+
+  const API_URL =
+    process.env.APP_ENV === "production"
+      ? process.env.EXPO_PUBLIC_PROD_API_URL
+      : process.env.EXPO_PUBLIC_DEV_API_URL;
+  Alert.alert("API_URL:", API_URL);
+  console.log("API_URL:", API_URL); //📒📒for debugging o
 
   return (
     <View style={styles.homeContainer}>
-      
       <Text style={styles.text}>Vawkei || Voke's</Text>
       <Text style={styles.text}>Book Scanner App</Text>
 
@@ -19,7 +24,6 @@ export default function HomeScreen() {
           <Text style={styles.buttonText}>Login || Signup</Text>
         </TouchableOpacity>
       </View>
-
     </View>
   );
 }
@@ -46,7 +50,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "bold",
   },
-  buttonText:{
+  buttonText: {
     color: "white",
-  }
+  },
 });
